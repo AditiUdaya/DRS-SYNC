@@ -17,6 +17,7 @@ target_include_directories(blake3 PUBLIC libs)
 add_executable(drogon_test
     main.cpp
     ping_controller.cpp
+    manifest_controller.cpp
 )
 
 target_link_libraries(drogon_test PRIVATE
