@@ -1,109 +1,72 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <iostream>
-#include <string>
+#include <fstream>
 #include <vector>
+#include <string>
 #include <cstdint>
+#include <unordered_map>
+
 #include "reliable_packet.hpp"
 
-#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "Ws2_32.lib")
 
-constexpr uint16_t LISTEN_PORT = 5000;
-constexpr int RECV_BUF = 128 * 1024;
+constexpr uint16_t RECEIVER_PORT = 5000;
+constexpr uint16_t ACK_PORT      = 5001;
+constexpr uint32_t CHUNK_SIZE    = 65536;
 
 int main() {
-    // --- Winsock init ---
-    WSADATA w;
-    if (WSAStartup(MAKEWORD(2,2), &w) != 0) {
-        std::cerr << "WSAStartup failed\n";
+    WSADATA wsa;
+    WSAStartup(MAKEWORD(2,2), &wsa);
+
+    SOCKET sock = socket(AF_INET, SOCK_DGRAM, 0);
+    SOCKET sock_ack = socket(AF_INET, SOCK_DGRAM, 0);
+
+    sockaddr_in addr{};
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(RECEIVER_PORT);
+    inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
+
+    if (bind(sock, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR) {
+        std::cerr << "bind failed\n";
         return 1;
     }
 
-    SOCKET sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (sock == INVALID_SOCKET) {
-        std::cerr << "socket failed WSA=" << WSAGetLastError() << "\n";
-        WSACleanup();
-        return 1;
-    }
+    std::cout << "[receiver] listening on port 5000\n";
 
-    sockaddr_in bind_addr{};
-    bind_addr.sin_family = AF_INET;
-    bind_addr.sin_port = htons(LISTEN_PORT);
-    bind_addr.sin_addr.s_addr = INADDR_ANY;
+    std::ofstream out("received.dat", std::ios::binary);
 
-    if (bind(sock, (sockaddr*)&bind_addr, sizeof(bind_addr)) == SOCKET_ERROR) {
-        std::cerr << "bind failed WSA=" << WSAGetLastError() << "\n";
-        closesocket(sock);
-        WSACleanup();
-        return 1;
-    }
-
-    std::cout << "[receiver] listening on port " << LISTEN_PORT << "\n";
-
-    std::vector<char> buf(RECV_BUF);
+    sockaddr_in sender_addr{};
+    int sender_len = sizeof(sender_addr);
 
     while (true) {
-        sockaddr_in from{};
-        int fromlen = sizeof(from);
+        std::vector<char> buf(sizeof(PacketHeader) + CHUNK_SIZE);
+        int r = recvfrom(sock, buf.data(), buf.size(), 0,
+                         (sockaddr*)&sender_addr, &sender_len);
 
-        int r = recvfrom(sock, buf.data(), (int)buf.size(), 0,
-                         (sockaddr*)&from, &fromlen);
-
-        if (r == SOCKET_ERROR) {
-            std::cerr << "recvfrom failed WSA=" << WSAGetLastError() << "\n";
-            continue;
-        }
-
-        if (r < (int)sizeof(PacketHeader)) {
-            std::cerr << "[receiver] packet too small (" << r << " bytes)\n";
-            continue;
-        }
+        if (r <= 0) continue;
 
         PacketHeader h;
-        memcpy(&h, buf.data(), sizeof(PacketHeader));
+        memcpy(&h, buf.data(), sizeof(h));
+        unpack_header(h);
 
-        uint8_t type;
-        uint32_t id;
-        uint32_t len;
-        unpack_header(h, type, id, len);
+        if (h.type == 1) { // CHUNK
+            uint32_t cid = h.chunk_id;
+            uint32_t len = h.length;
 
-        // META packet
-        if (type == 10) {
-            if (r < (int)(sizeof(PacketHeader) + len)) {
-                std::cerr << "[receiver] incomplete META payload\n";
-                continue;
-            }
+            out.seekp((uint64_t)cid * CHUNK_SIZE);
+            out.write(buf.data() + sizeof(h), len);
 
-            std::string payload(buf.data() + sizeof(PacketHeader), len);
-            auto pos = payload.find('\n');
-            if (pos == std::string::npos) {
-                std::cerr << "[receiver] malformed META\n";
-                continue;
-            }
+            // send ACK
+            PacketHeader ack;
+            pack_header(ack, 2, cid, 0);
 
-            std::string filename = payload.substr(0, pos);
-            std::string size_str = payload.substr(pos + 1);
+            sendto(sock_ack, (char*)&ack, sizeof(ack), 0,
+                   (sockaddr*)&sender_addr, sender_len);
 
-            uint64_t filesize = 0;
-            try {
-                filesize = std::stoull(size_str);
-            } catch (...) {
-                filesize = 0;
-            }
-
-            uint32_t total_chunks =
-                (filesize + 65536 - 1) / 65536;
-
-            std::cout << "[receiver] META: file=" << filename
-                      << " size=" << filesize
-                      << " chunks=" << total_chunks << "\n";
-        }
-        else {
-            std::cout << "[receiver] unknown type=" << (int)type << "\n";
+            std::cout << "[receiver] wrote chunk " << cid << "\n";
         }
     }
 
-    closesocket(sock);
-    WSACleanup();
     return 0;
 }
