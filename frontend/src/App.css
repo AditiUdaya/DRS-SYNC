@@ -1,0 +1,145 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #e10600 0%, #ff6b00 100%);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(225, 6, 0, 0.3);
+}
+
+.header h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -2px;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #e10600;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.normal {
+  background: #4caf50;
+  color: white;
+}
+
+.status-badge.high {
+  background: #ff9800;
+  color: white;
+}
+
+.status-badge.critical {
+  background: #e10600;
+  color: white;
+}
+
+button {
+  background: #e10600;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #ff0800;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(225, 6, 0, 0.4);
+}
+
+button:disabled {
+  background: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+
+input, select {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #e10600;
+  box-shadow: 0 0 0 3px rgba(225, 6, 0, 0.2);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #888;
+}

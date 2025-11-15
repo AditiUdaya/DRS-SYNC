@@ -1,0 +1,31 @@
+# Build directories
+build/
+*.o
+*.a
+*.so
+*.dylib
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Node modules
+node_modules/
+frontend/node_modules/
+
+# Test files
+test_file.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
