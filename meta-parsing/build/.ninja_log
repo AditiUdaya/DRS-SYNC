@@ -1,0 +1,19 @@
+# ninja log v7
+19	285	7848969581062163	CMakeFiles/blake3.dir/libs/blake3.c.obj	ed13a9d4b1947122
+38	434	7848969581250195	CMakeFiles/blake3.dir/libs/blake3_portable.c.obj	35cc456d61b08c3a
+26	618	7848969581132554	CMakeFiles/blake3.dir/libs/blake3_dispatch.c.obj	3f5546f7d07e206f
+619	797	7848969587052834	libblake3.a	54a3f43dc65af042
+797	2528	7848969588845546	CMakeFiles/udp_receiver.dir/udp_receiver.cpp.obj	dc1167b27377f83f
+286	3467	7848969583731848	CMakeFiles/drogon_test.dir/ping_controller.cpp.obj	fe9560f56e5ebcff
+2528	4206	7848969606159385	CMakeFiles/udp_sender.dir/udp_sender.cpp.obj	a859a5eac5d94d9
+77	4240	7848969581630991	CMakeFiles/drogon_test.dir/main.cpp.obj	4e90c303e50f6298
+4241	4516	7848969623282108	udp_receiver.exe	c8a11ae2da3f05b8
+4516	4734	7848969626036307	udp_sender.exe	33ebc021f4d9b843
+434	4831	7848969585210936	CMakeFiles/drogon_test.dir/manifest_controller.cpp.obj	572bdd717b9f5772
+25	1698	7848284724258139	CMakeFiles/udp_receiver_reliable.dir/udp_receiver_reliable.cpp.obj	8fb0c9f03655380c
+4831	6748	7848969629182041	drogon_test.exe	b10f8f5420c01f8d
+1699	2033	7848284741002817	udp_receiver_reliable.exe	ae61b6c9685f019a
+3467	5188	7848969615542930	CMakeFiles/udp_sender_reliable.dir/udp_sender_reliable.cpp.obj	b12892e09ae404a
+5189	5401	7848969632759726	udp_sender_reliable.exe	b678a422cd8ceb17
+13	1684	7848970456085819	CMakeFiles/udp_receiver_reliable.dir/udp_receiver_reliable.cpp.obj	8fb0c9f03655380c
+1691	2221	7848970472863435	udp_receiver_reliable.exe	ae61b6c9685f019a
