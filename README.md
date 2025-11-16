@@ -1,5 +1,4 @@
 # DRS-SYNC
-=======
 
 ## Setup Instructions
 
