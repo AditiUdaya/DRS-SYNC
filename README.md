@@ -1,7 +1,5 @@
-<<<<<<< Updated upstream
 # DRS-SYNC
 =======
-# ZIP File Transfer - React App
 
 ## Setup Instructions
 
@@ -86,5 +84,3 @@ npm start
 ```
 
 Then open `http://localhost:3000` in your browser.
-
->>>>>>> Stashed changes
