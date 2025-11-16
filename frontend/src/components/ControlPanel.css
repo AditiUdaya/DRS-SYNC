@@ -1,0 +1,57 @@
+.control-panel {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.control-section {
+  flex: 1;
+}
+
+.control-section h3 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: var(--primary-blue);
+}
+
+.control-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.simulator-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-row label {
+  min-width: 120px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.input.small {
+  flex: 1;
+  max-width: 150px;
+  padding: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.control-row input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 1200px) {
+  .control-panel {
+    flex-direction: column;
+  }
+}
+
